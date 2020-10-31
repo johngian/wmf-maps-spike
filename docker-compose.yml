@@ -6,7 +6,7 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_USER=${PGUSER:-gisuser}
-      - POSTGRES_PASSWORD=${PGPASS:-secret}
+      - POSTGRES_PASSWORD=${PGPASSWORD:-secret}
       - POSTGRES_DB=${PGDATABASE:-osm}
 
   tegola-tile-server:
