@@ -1,0 +1,18 @@
+{
+  "options": {
+    "paths": {
+      "root": "/etc/tileserver-gl/",
+      "styles": "styles",
+      "fonts": "fonts"
+    }
+  },
+  "styles": {
+    "osm-bright": {
+      "style": "osm-bright/style.json",
+      "tilejson": {
+        "type": "overlay",
+        "bounds": [8.529446, 47.364758, 8.55232, 47.380539]
+      }
+    }
+  }
+}
