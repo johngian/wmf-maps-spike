@@ -1,0 +1,6 @@
+[submodule "vendor/tegola"]
+	path = vendor/tegola
+	url = https://github.com/go-spatial/tegola.git
+[submodule "vendor/tileserver-gl"]
+	path = vendor/tileserver-gl
+	url = https://github.com/maptiler/tileserver-gl.git
