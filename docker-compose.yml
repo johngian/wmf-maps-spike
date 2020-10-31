@@ -5,9 +5,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=${PGUSER:-gisuser}
-      - POSTGRES_PASSWORD=${PGPASSWORD:-secret}
-      - POSTGRES_DB=${PGDATABASE:-gis}
+      - POSTGRES_USER=${PGUSER}
+      - POSTGRES_PASSWORD=${PGPASSWORD}
+      - POSTGRES_DB=${PGDATABASE}
     volumes:
       - ./data/postgis:/var/lib/postgresql/data
 
@@ -20,6 +20,8 @@ services:
       - 8080:8080
     volumes:
       - ./config/tegola.toml:/etc/tegola.toml
+    depends_on:
+      - postgis
     command: serve --config /etc/tegola.toml
 
   tileserver-gl:
@@ -29,4 +31,20 @@ services:
       - 8090:80
     volumes:
       - ./config/tileserver-gl.json:/etc/tileserver-gl.json
+    depends_on:
+      - tegola
     command: --config /etc/tileserver-gl.json
+
+  bootstrap:
+    build:
+      context: .
+      dockerfile: ./dist/osm-init.Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./data/pbf:/srv/pbf
+      - ./sql:/srv/sql
+      - ./config/imposm_mapping.yml:/etc/imposm/mapping.yml
+    depends_on:
+      - postgis
+    command: osm-initial-import -H postgis -p ${PBF_URL}

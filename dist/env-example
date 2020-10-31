@@ -2,3 +2,4 @@ PGDATABASE=gis
 PGUSER=default
 PGPASSWORD=secret
 PGPORT=5432
+PBF_URL=https://download.geofabrik.de/asia/israel-and-palestine-latest.osm.pbf

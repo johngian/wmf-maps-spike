@@ -8,23 +8,19 @@ help:
 
 docker_build: ## Build docker images
 	docker-compose build
-	docker build -f dist/osm-init.Dockerfile -t osm-init:latest $(mkfile_dir)
 
 docker_pull: ## Pull docker images
 	docker-compose pull
 
-docker_up: docker_build docker_pull ## Bring services up
-	docker-compose up -d
+run_services: docker_build docker_pull ## Bring services up
+	docker-compose up -d postgis
+	docker-compose run --service-ports bootstrap wait-for-it postgis:5432
+	docker-compose up -d tegola tileserver-gl
 
-prepare_db: docker_up ## Download pbf and load data using imposm3
-	docker run --network host osm-init:latest wait-for-it 127.0.0.1:5432
-	docker run --network host --env-file $(mkfile_dir).env \
-			-v $(mkfile_dir)data/pbf:/srv/pbf \
-			-v $(mkfile_dir)config/imposm_mapping.yml:/etc/imposm/mapping.yml \
-			-v $(mkfile_dir)sql:/srv/sql \
-			osm-init:latest osm-initial-import $(ARGS)
+bootstrap: run_services ## Download pbf and load data using imposm3
+	docker-compose up bootstrap
 
-all: docker_up prepare_db
+all: run_services bootstrap
 
 clean:
 	docker-compose stop
