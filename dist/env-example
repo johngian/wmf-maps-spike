@@ -1,0 +1,4 @@
+PGDATABASE=gis
+PGUSER=default
+PGPASSWORD=secret
+PGPORT=5432
