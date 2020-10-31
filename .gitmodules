@@ -4,3 +4,6 @@
 [submodule "vendor/tileserver-gl"]
 	path = vendor/tileserver-gl
 	url = https://github.com/maptiler/tileserver-gl.git
+[submodule "vendor/osm-bright-gl-style"]
+	path = vendor/osm-bright-gl-style
+	url = https://github.com/openmaptiles/osm-bright-gl-style.git
