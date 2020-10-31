@@ -7,9 +7,11 @@ services:
     environment:
       - POSTGRES_USER=${PGUSER:-gisuser}
       - POSTGRES_PASSWORD=${PGPASSWORD:-secret}
-      - POSTGRES_DB=${PGDATABASE:-osm}
+      - POSTGRES_DB=${PGDATABASE:-gis}
+    volumes:
+      - ./data/postgis:/var/lib/postgresql/data
 
-  tegola-tile-server:
+  tegola:
     build:
       context: vendor/tegola
       args:
