@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  postgis:
+    image: postgis/postgis
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${PGUSER:-gisuser}
+      - POSTGRES_PASSWORD=${PGPASS:-secret}
+      - POSTGRES_DB=${PGDATABASE:-osm}
+
+  tegola-tile-server:
+    build:
+      context: vendor/tegola
+      args:
+        - VERSION=master
+    ports:
+      - 8080:8080
+    volumes:
+      - ./config/tegola.toml:/etc/tegola.toml
+    command: serve --config /etc/tegola.toml
+
+  tileserver-gl:
+    build:
+      context: vendor/tileserver-gl
+    ports:
+      - 8090:80
+    volumes:
+      - ./config/tileserver-gl.json:/etc/tileserver-gl.json
+    command: --config /etc/tileserver-gl.json
