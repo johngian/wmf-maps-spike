@@ -25,3 +25,8 @@ prepare_db: docker_up ## Download pbf and load data using imposm3
 			osm-init:latest osm-initial-import $(ARGS)
 
 all: docker_up prepare_db
+
+clean:
+	docker-compose stop
+	docker-compose rm
+	sudo git clean -fdx ./data
