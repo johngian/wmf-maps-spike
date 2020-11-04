@@ -6,7 +6,7 @@ PHONY: help
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-vendor:
+vendor: ## Fetch vendored dependencies
 	git submodule init
 	git submodule update
 
@@ -16,15 +16,16 @@ docker_build: ## Build docker images
 docker_pull: ## Pull docker images
 	docker-compose pull
 
-run_services: vendor docker_build docker_pull ## Bring services up
+bootstrap_env: ## Prepare environment variables
+	cp $(mkfile_dir)dist/env-example $(mkfile_dir).env
+
+run_services: vendor bootstrap_env docker_build docker_pull ## Bring services up
 	docker-compose up -d postgis
 	docker-compose run --service-ports bootstrap wait-for-it postgis:5432
 	docker-compose up -d tegola tileserver-gl
 
 bootstrap: run_services ## Download pbf and load data using imposm3
 	docker-compose up bootstrap
-
-all: run_services bootstrap
 
 clean:
 	docker-compose stop
